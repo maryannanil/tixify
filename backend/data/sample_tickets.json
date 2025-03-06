@@ -1,0 +1,42 @@
+[
+  {
+    "ticket_id": "ZAYN-IND-0001",
+    "event_name": "Zayn Malik Live - Delhi",
+    "date": "2025-03-15",
+    "venue": "Indira Gandhi Indoor Stadium, Delhi",
+    "seat": "Platinum, Row A, 21",
+    "buyer_name": "Aryan Mehta"
+  },
+  {
+    "ticket_id": "ZAYN-IND-0002",
+    "event_name": "Zayn Malik Live - Mumbai",
+    "date": "2025-03-20",
+    "venue": "DY Patil Stadium, Mumbai",
+    "seat": "Gold, Row B, 35",
+    "buyer_name": "Kavya Sharma"
+  },
+  {
+    "ticket_id": "ZAYN-IND-0003",
+    "event_name": "Zayn Malik Live - Bangalore",
+    "date": "2025-03-25",
+    "venue": "M. Chinnaswamy Stadium, Bangalore",
+    "seat": "VIP, Row C, 12",
+    "buyer_name": "Rohan Kapoor"
+  },
+  {
+    "ticket_id": "ZAYN-IND-0004",
+    "event_name": "Zayn Malik Live - Kolkata",
+    "date": "2025-03-30",
+    "venue": "Eco Park Arena, Kolkata",
+    "seat": "Silver, Row D, 50",
+    "buyer_name": "Priya Banerjee"
+  },
+  {
+    "ticket_id": "ZAYN-IND-0005",
+    "event_name": "Zayn Malik Live - Hyderabad",
+    "date": "2025-04-05",
+    "venue": "Gachibowli Stadium, Hyderabad",
+    "seat": "Diamond, Row E, 5",
+    "buyer_name": "Aarav Reddy"
+  }
+]
