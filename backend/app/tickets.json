@@ -1,0 +1,42 @@
+[
+  {
+    "ticket_id": "ZAYN001",
+    "event": "Zayn Malik Live in Mumbai",
+    "location": "Mumbai",
+    "date": "2025-09-15",
+    "source": "BookMyShow",
+    "verified": true
+  },
+  {
+    "ticket_id": "ARMAAN002",
+    "event": "Armaan Malik Live in Delhi",
+    "location": "Delhi",
+    "date": "2025-10-05",
+    "source": "Paytm Insider",
+    "verified": true
+  },
+  {
+    "ticket_id": "DILJIT003",
+    "event": "Diljit Dosanjh Live in Chandigarh",
+    "location": "Chandigarh",
+    "date": "2025-11-20",
+    "source": "BookMyShow",
+    "verified": true
+  },
+  {
+    "ticket_id": "NEHA004",
+    "event": "Neha Kakkar Live in Bangalore",
+    "location": "Bangalore",
+    "date": "2025-12-01",
+    "source": "Paytm Insider",
+    "verified": true
+  },
+  {
+    "ticket_id": "ARJIT005",
+    "event": "Arijit Singh Live in Kolkata",
+    "location": "Kolkata",
+    "date": "2026-01-10",
+    "source": "Official Website",
+    "verified": true
+  }
+]
