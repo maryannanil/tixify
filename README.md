@@ -68,5 +68,3 @@ To build a production-level, AI-integrated, cloud-deployed, real-time ticket ver
 
 ---
 
-## 💌 With love,  
-Your personal CTO 💻❤️  
