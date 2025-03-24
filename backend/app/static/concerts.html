@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tixify Concerts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .concerts-container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .concert {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .concert:last-child {
+            border-bottom: none;
+        }
+
+        .concert h2 {
+            margin: 0;
+            color: #555;
+        }
+
+        .concert p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .btn-refresh {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-refresh:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎶 Upcoming Concerts - Tixify 🎫</h1>
+
+<div class="concerts-container" id="concerts-container">
+    <!-- Concerts will be loaded here dynamically -->
+</div>
+
+<button class="btn-refresh" onclick="fetchConcerts()">Refresh Concert List</button>
+
+<script>
+    async function fetchConcerts() {
+        const container = document.getElementById('concerts-container');
+        container.innerHTML = "<p>Loading concerts...</p>";
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/concerts');
+            const data = await response.json();
+
+            if (data.concerts.length === 0) {
+                container.innerHTML = "<p>No concerts available right now.</p>";
+                return;
+            }
+
+            let htmlContent = '';
+            data.concerts.forEach(concert => {
+                htmlContent += `
+                    <div class="concert">
+                        <h2>${concert.name}</h2>
+                        <p><strong>Date:</strong> ${concert.date}</p>
+                        <p><strong>Venue:</strong> ${concert.venue}</p>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = htmlContent;
+        } catch (error) {
+            console.error('Error fetching concerts:', error);
+            container.innerHTML = "<p>Failed to load concerts. Please try again later.</p>";
+        }
+    }
+
+    // Load concerts on page load
+    window.onload = fetchConcerts;
+</script>
+
+</body>
+</html>

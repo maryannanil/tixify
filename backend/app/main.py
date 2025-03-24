@@ -1,38 +1,76 @@
-from fastapi import FastAPI, HTTPException
-from pathlib import Path
-import json
+from fastapi import FastAPI, UploadFile, Form, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+import sqlite3
+from PIL import Image
+from pyzbar.pyzbar import decode
+import os
 
 app = FastAPI()
 
-# Load the tickets data
-data_path = Path(__file__).parent / "tickets.json"
-with data_path.open() as file:
-    tickets_data = json.load(file)
+# -------------------- CORS Middleware --------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# -------------------- DB Check Function --------------------
+def check_ticket_in_db(ticket_id: str):
+    conn = sqlite3.connect('tickets.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT status FROM tickets WHERE lower(ticket_id) = ?', (ticket_id.lower(),))
+    result = cursor.fetchone()
+    conn.close()
+    return result
 
-@app.post("/verify_ticket")
-def verify_ticket(ticket: dict):
-    mismatches = []
+# -------------------- QR Code/Barcode Reader --------------------
+def scan_ticket_from_image(image_path: str):
+    try:
+        image = Image.open(image_path)
+        decoded_objects = decode(image)
+        for obj in decoded_objects:
+            return obj.data.decode('utf-8')  # Return first decoded QR/barcode data as string
+        return None  # No QR/barcode found
+    except Exception as e:
+        print("Error reading QR:", e)
+        return None
 
-    # Find ticket by ticket_id
-    for original_ticket in tickets_data:
-        if original_ticket["ticket_id"] == ticket["ticket_id"]:
-            # Check each field for mismatches
-            for field in ["event", "location", "date", "source"]:
-                if ticket.get(field) != original_ticket.get(field):
-                    mismatches.append(field)
-            
-            if mismatches:
-                return {
-                    "verified": False,
-                    "mismatches": mismatches,
-                    "message": "Ticket verification failed due to mismatched details."
-                }
+# -------------------- API Endpoint --------------------
+@app.post("/validate_ticket")
+async def validate_ticket(
+    ticket_id: str = Form(None),  # Form input optional
+    file: UploadFile = File(None)  # File upload optional
+):
+    if not ticket_id and not file:
+        raise HTTPException(status_code=400, detail="Please provide a Ticket ID or upload a file.")
+
+    # ---------------- Direct Ticket ID Input ----------------
+    if ticket_id:
+        result = check_ticket_in_db(ticket_id.strip())
+        if result and result[0] == 'valid':
+            return JSONResponse(content={"message": "Valid Ticket ✅"})
+        else:
+            return JSONResponse(content={"message": "Invalid Ticket ❌"})
+
+    # ---------------- File Upload & QR/Barcode Scan ----------------
+    if file:
+        os.makedirs('uploads', exist_ok=True)
+        file_path = os.path.join('uploads', file.filename)
+        await file.seek(0)
+        with open(file_path, "wb") as buffer:
+            buffer.write(await file.read())
+
+        # Scan for ticket ID from QR/barcode inside the image
+        extracted_ticket_id = scan_ticket_from_image(file_path)
+
+        if extracted_ticket_id:
+            result = check_ticket_in_db(extracted_ticket_id.strip())
+            if result and result[0] == 'valid':
+                return JSONResponse(content={"message": f"Valid Ticket ✅ ({extracted_ticket_id})"})
             else:
-                return {
-                    "verified": True,
-                    "message": "Ticket successfully verified."
-                }
-
-    # If no ticket_id match found
-    raise HTTPException(status_code=404, detail="Ticket ID not found in our records.")
+                return JSONResponse(content={"message": "Invalid Ticket ❌"})
+        else:
+            return JSONResponse(content={"message": "No valid QR/Barcode found in image ❌"})

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Ticket</title>
+</head>
+<body>
+    <h1>Upload Ticket for Validation</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <input type="submit" value="Check Ticket">
+    </form>
+
+    <div id="message" style="margin-top: 20px; font-weight: bold;"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = ''; // Clear previous messages
+
+            fetch('http://127.0.0.1:5000/verify_ticket', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data); // For debugging
+
+                if (data.valid) {
+                    messageDiv.textContent = '✅ Ticket is VALID! Welcome to the event!';
+                    messageDiv.style.color = 'green';
+                } else {
+                    messageDiv.textContent = '❌ Invalid Ticket! Please check again.';
+                    messageDiv.style.color = 'red';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                messageDiv.textContent = '🚨 Error verifying ticket. Please try again later.';
+                messageDiv.style.color = 'red';
+            });
+        });
+    </script>
+</body>
+</html>

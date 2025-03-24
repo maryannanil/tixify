@@ -1,25 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tixify - Verify Your Tickets</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Tixify - Verify Your Ticket</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    body {
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .glow:hover {
+      text-shadow: 0 0 10px #00ffcc;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid #00ffcc;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+      margin-top: 10px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
-<body>
-  <header>
-    <h1>Tixify 🎟️</h1>
-    <p>Check if your ticket is legit or fake!</p>
+
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="fixed w-full top-0 left-0 glass p-4 flex justify-between items-center z-50">
+    <h1 class="text-2xl font-bold glow">Tixify</h1>
+    <nav class="space-x-6">
+      <a href="#about" class="hover:underline glow">About</a>
+      <a href="#verify" class="hover:underline glow">Verify</a>
+    </nav>
   </header>
 
-  <main>
-    <form id="ticketForm">
-      <input type="text" placeholder="Enter Ticket ID" id="ticketId">
-      <button type="submit">Verify Ticket</button>
-    </form>
-    <div id="result"></div>
-  </main>
+  <!-- Hero Section -->
+  <section class="h-screen flex flex-col justify-center items-center text-center relative">
+    <h2 class="text-5xl font-extrabold mb-6 leading-tight">Stop Scammers.<br><span class="text-teal-400">Verify Your Tickets.</span></h2>
+    <p class="text-lg max-w-2xl mb-4">Protect yourself from fraud with our fast and secure ticket verification service.</p>
+    <div class="absolute bottom-10 animate-bounce">
+      <a href="#about">
+        <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </a>
+    </div>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- About Section -->
+  <section id="about" class="py-20 flex flex-col items-center">
+    <div class="glass p-10 rounded-2xl max-w-5xl text-center">
+      <h3 class="text-4xl font-bold mb-6">Why Tixify?</h3>
+      <p class="mb-8">Tixify is your ultimate solution to fight fake tickets. We ensure every ticket is verified with advanced AI-powered checks.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+        <div>
+          <h4 class="text-xl font-semibold mb-2">🔍 Real-Time Verification</h4>
+          <p>Instantly check ticket authenticity.</p>
+        </div>
+        <div>
+          <h4 class="text-xl font-semibold mb-2">🤖 AI Fraud Detection</h4>
+          <p>Smart algorithms flag fake tickets.</p>
+        </div>
+        <div>
+          <h4 class="text-xl font-semibold mb-2">⚡ Fast & Secure</h4>
+          <p>Reliable checks without the wait.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verify Section -->
+  <section id="verify" class="py-24 flex flex-col items-center">
+    <h3 class="text-4xl font-bold mb-6">Verify Your Ticket</h3>
+    <form id="verifyForm" class="glass p-8 rounded-xl flex flex-col gap-6 w-full max-w-md">
+      <input type="text" id="ticketId" placeholder="Enter Ticket ID"
+        class="p-4 rounded-lg bg-white/20 placeholder-white text-white focus:outline-none">
+      <input type="file" id="ticketFile"
+        class="p-4 rounded-lg bg-white/20 text-white focus:outline-none">
+      <button type="submit"
+        class="bg-[#00b3b3] text-white font-bold py-4 rounded-lg hover:bg-[#009999] transition duration-300">Verify
+        Now</button>
+      <div id="loading" class="hidden">
+        <div class="spinner"></div>
+        <p class="text-center mt-2">Verifying ticket, please wait...</p>
+      </div>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-6 text-center glass text-sm w-full">
+    © 2025 Tixify. All rights reserved.
+  </footer>
+
+  <!-- Script for Verification and Loader -->
+  <script>
+    document.getElementById('verifyForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const ticketId = document.getElementById('ticketId').value;
+      const ticketFile = document.getElementById('ticketFile').files[0];
+      const loadingDiv = document.getElementById('loading');
+
+      if (!ticketId && !ticketFile) {
+        alert("⚠️ Please enter a Ticket ID or upload a file!");
+        return;
+      }
+
+      const formData = new FormData();
+      if (ticketId) formData.append('ticket_id', ticketId);
+      if (ticketFile) formData.append('file', ticketFile);
+
+      // Show loader
+      loadingDiv.classList.remove('hidden');
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/validate_ticket', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        // Hide loader
+        loadingDiv.classList.add('hidden');
+
+        // Popup alert for Valid or Invalid
+        if (data.message.includes('Valid')) {
+          alert("" + data.message);
+        } else {
+          alert("❌ " + data.message);
+        }
+
+      } catch (error) {
+        loadingDiv.classList.add('hidden'); // Hide loader in case of error
+        alert("❌ Error: " + error.message);
+      }
+    });
+  </script>
+
 </body>
+
 </html>

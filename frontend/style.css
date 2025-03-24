@@ -1,18 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #1E1E2F;
-    color: #FFFFFF;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    color: #f1f1f1;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.7);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: #a2ff86;
+    letter-spacing: 2px;
+}
+
+nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #a2ff86;
+}
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    padding: 50px;
-  }
-  input, button {
-    padding: 10px;
-    margin: 10px;
-    border-radius: 5px;
-  }
-  button {
-    background-color: #6C63FF;
-    color: #fff;
+    padding: 0 20px;
+    padding-top: 100px;
+}
+
+.hero h1 {
+    font-size: 60px;
+    color: #a2ff86;
+    margin-bottom: 10px;
+    animation: popIn 1.2s ease-out forwards;
+    opacity: 0;
+}
+
+.hero p {
+    font-size: 20px;
+    max-width: 600px;
+    line-height: 1.5;
+    animation: fadeIn 2s ease-out forwards;
+    opacity: 0;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+.about-content {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 800px;
+}
+
+.about-content h2 {
+    font-size: 28px;
+    color: #a2ff86;
+    margin-bottom: 10px;
+}
+
+.about-content p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 150px auto;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease-out;
+}
+
+h2 {
+    color: #a2ff86;
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.upload-section {
+    margin-top: 30px;
+}
+
+input[type="file"], input[type="text"], button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
     border: none;
-  }
-  
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+input[type="file"], input[type="text"] {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+button {
+    background-color: #a2ff86;
+    color: #000;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #88e06d;
+}
+
+footer {
+    text-align: center;
+    margin: 50px 0 20px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.spacer {
+    margin-top: 20px;
+}
